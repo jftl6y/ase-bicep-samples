@@ -1,0 +1,73 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "administratorLogin": {
+            "value": ""
+        },
+        "administratorLoginPassword": {
+            "value": null
+        },
+        "serverName": {
+            "value": ""
+        },
+        "serverLocation": {
+            "value": ""
+        },
+        "elasticPoolName": {
+            "value": ""
+        },
+        "skuName": {
+            "value": "GP_Gen5"
+        },
+        "tier": {
+            "value": "GeneralPurpose"
+        },
+        "poolLimit": {
+            "value": "2"
+        },
+        "poolSize": {
+            "value": 34359738368
+        },
+        "perDatabasePerformanceMin": {
+            "value": "0"
+        },
+        "perDatabasePerformanceMax": {
+            "value": "2"
+        },
+        "readscaleReplicas": {
+            "value": 0
+        },
+        "zoneRedundant": {
+            "value": false
+        },
+        "licenseType": {
+            "value": "LicenseIncluded"
+        },
+        "minCapacity": {
+            "value": "0"
+        },
+        "allowAzureIps": {
+            "value": false
+        },
+        "elasticPoolTags": {
+            "value": {}
+        },
+        "serverTags": {
+            "value": {}
+        },
+        "maintenanceConfigurationId": {
+            "value": "/subscriptions/6956ed15-2e18-4b8e-9db7-6a61647dedfb/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default"
+        },
+        "administrators": {
+            "value": {
+                "administratorType": "activeDirectory",
+                "login": "adminuser@user.com",
+                "sid": "user-sid-here",
+                "tenantId": "tenant-id-here",
+                "azureADOnlyAuthentication": true,
+                "principalType": "User"
+            }
+        }
+    }
+}

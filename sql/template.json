@@ -1,0 +1,132 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "administratorLogin": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "administratorLoginPassword": {
+            "type": "securestring",
+            "defaultValue": ""
+        },
+        "administrators": {
+            "type": "object",
+            "defaultValue": {}
+        },
+        "serverName": {
+            "type": "string"
+        },
+        "serverLocation": {
+            "type": "string"
+        },
+        "elasticPoolName": {
+            "type": "string"
+        },
+        "skuName": {
+            "type": "string"
+        },
+        "tier": {
+            "type": "string"
+        },
+        "poolLimit": {
+            "type": "string"
+        },
+        "poolSize": {
+            "type": "int"
+        },
+        "perDatabasePerformanceMin": {
+            "type": "string"
+        },
+        "perDatabasePerformanceMax": {
+            "type": "string"
+        },
+        "zoneRedundant": {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "readscaleReplicas": {
+            "type": "int"
+        },
+        "licenseType": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "minCapacity": {
+            "type": "string"
+        },
+        "allowAzureIps": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "serverTags": {
+            "type": "object",
+            "defaultValue": {}
+        },
+        "elasticPoolTags": {
+            "type": "object",
+            "defaultValue": {}
+        },
+        "maintenanceConfigurationId": {
+            "type": "string",
+            "defaultValue": ""
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2020-11-01-preview",
+            "tags": "[parameters('serverTags')]",
+            "location": "[parameters('serverLocation')]",
+            "name": "[parameters('serverName')]",
+            "properties": {
+                "version": "12.0",
+                "administrators": "[parameters('administrators')]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2021-08-01-preview",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
+                    ],
+                    "tags": "[parameters('elasticPoolTags')]",
+                    "location": "[parameters('serverLocation')]",
+                    "name": "[concat(parameters('serverName'), '/', parameters('elasticPoolName'))]",
+                    "sku": {
+                        "name": "[parameters('skuName')]",
+                        "tier": "[parameters('tier')]",
+                        "capacity": "[parameters('poolLimit')]"
+                    },
+                    "properties": {
+                        "perDatabaseSettings": {
+                            "minCapacity": "[parameters('perDatabasePerformanceMin')]",
+                            "maxCapacity": "[parameters('perDatabasePerformanceMax')]"
+                        },
+                        "highAvailabilityReplicaCount": "[parameters('readscaleReplicas')]",
+                        "maxSizeBytes": "[parameters('poolSize')]",
+                        "zoneRedundant": "[parameters('zoneRedundant')]",
+                        "minCapacity": "[parameters('minCapacity')]",
+                        "licenseType": "[parameters('licenseType')]",
+                        "maintenanceConfigurationId": "[parameters('maintenanceConfigurationId')]"
+                    },
+                    "type": "Microsoft.Sql/servers/elasticpools"
+                },
+                {
+                    "condition": "[parameters('allowAzureIps')]",
+                    "apiVersion": "2014-04-01-preview",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
+                    ],
+                    "location": "[parameters('serverLocation')]",
+                    "name": "AllowAllWindowsAzureIps",
+                    "properties": {
+                        "endIpAddress": "0.0.0.0",
+                        "startIpAddress": "0.0.0.0"
+                    },
+                    "type": "firewallrules"
+                }
+            ],
+            "type": "Microsoft.Sql/servers"
+        }
+    ]
+}
